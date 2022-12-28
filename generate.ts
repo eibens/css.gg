@@ -5,11 +5,17 @@ import { pascalCase, snakeCase } from "https://esm.sh/tiny-case@1.0.3";
 /** HELPERS **/
 
 function preactComponentFromSvg(name: string, svg: string) {
-  const svgLines = svg.trim().split("\n");
-  const indented = svgLines.map((line) => `    ${line}`).join("\n");
+  const source = svg
+    .trim()
+    .split("\n")
+    // remove specific lines: width="24" and height="24"
+    .filter((_, i) => ![1, 2].includes(i))
+    // indent
+    .map((line) => `    ${line}`)
+    .join("\n");
   return `export function ${name}() {
   return (
-${indented}
+${source}
   );
 }
 `;
